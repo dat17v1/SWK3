@@ -1,0 +1,13 @@
+# ignore everything
+*
+
+# but include this
+!.gitignore
+!*.java
+!*.html
+!*.txt
+!*.jpg
+!*.jpeg
+!*.png
+!*.mp4
+!*/
