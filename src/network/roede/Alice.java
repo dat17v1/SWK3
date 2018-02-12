@@ -20,16 +20,24 @@ public class Alice {
                  map.put((char)i,0); // initialisér map med alfabet
              }
              String line = "";
+             double counter = 0.0;
              while(scanner.hasNextLine()){
-             System.out.println(16);
+
                  line = scanner.nextLine().toLowerCase();
                  for (Character c : line.toCharArray()) {
                      if(Character.isLetter(c)) {
                          map.put(c, map.get(c) + 1);
+                         counter++;
                      }
                  }
              }
-             System.out.println(map);
+             System.out.println("Count: " + counter);
+             for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+                 double d = (entry.getValue() / counter ) * 100.0;
+                 System.out.println("Letter " + entry.getKey() +
+                 " occurrances: " + d);
+             }
+
 
          }else {
              System.out.println("file not found");
