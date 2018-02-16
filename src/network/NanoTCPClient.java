@@ -19,6 +19,9 @@ public class NanoTCPClient {
             System.out.println("har oprettet forbindelse.");
             PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
             pw.println("hello");
+
+
+
             InputStream inputStream = socket.getInputStream();
 
             Scanner scanner = new Scanner(inputStream);

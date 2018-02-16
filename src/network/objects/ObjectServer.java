@@ -15,6 +15,7 @@ public class ObjectServer {
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
             Message message = (Message) objectInputStream.readObject();
             message.verify();
+
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.writeObject(message);
             objectInputStream.close();
