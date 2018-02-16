@@ -32,6 +32,7 @@ public class MultiChatServer {
     }
 
     public void sendToAll(String message) {
+        System.out.println(message);
         for (Map.Entry<Socket, PrintWriter> entry: socketMap.entrySet()){
             entry.getValue().println(message);
         }
