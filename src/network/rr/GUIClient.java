@@ -2,6 +2,7 @@ package network.rr;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -21,8 +22,19 @@ public class GUIClient extends Application {
         //2. Lav GUI element. Noget synligt
         TextField nameField = new TextField();
         nameField.setPromptText("indtast navn");
+        TextField redField = new TextField();
+        redField.setPromptText("indtast rød 0-255");
+        TextField greenField = new TextField();
+        greenField.setPromptText("indtast grøn 0-255");
+        TextField blueField = new TextField();
+        blueField.setPromptText("indtast blå 0-255");
         Label label = new Label("Brug pilene til at styre din player");
-        vBox.getChildren().addAll(nameField,label);
+        Button connectBtn = new Button("Forbind");
+        connectBtn.setOnAction(event -> {
+            System.out.println("de har trykket på mig!");
+        });
+        vBox.getChildren().addAll(nameField,redField, greenField, blueField,label);
+        vBox.getChildren().addAll(connectBtn);
 
         //3. Lav Scene
         Scene scene = new Scene(vBox, 200,200 );
