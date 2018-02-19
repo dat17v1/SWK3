@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -30,12 +31,25 @@ public class GUIClient extends Application {
 
         //3. Lav Scene
         Scene scene = new Scene(vBox, 200,200 );
+        scene.setOnKeyPressed(event -> {
+            this.handleKeyPressed(event);
+        });
 
         //4. Angiv Scene i Stage
         primaryStage.setScene(scene);
 
         // 5. Kald på Stage.show()
         primaryStage.show();
+    }
+
+    private void handleKeyPressed(KeyEvent event){
+        switch (event.getCode()){
+            case UP: pw.println("UP"); break;
+            case DOWN: pw.println("DOWN"); break;
+            case LEFT: pw.println("LEFT"); break;
+            case RIGHT: pw.println("RIGHT"); break;
+
+        }
     }
 
     private void makeGUIElements(VBox vBox) {
@@ -54,8 +68,11 @@ public class GUIClient extends Application {
             // Opret forbindelse til Houston 192.168.0.8
             // Skal sende med følgende protokol:
             this.connectToServer();
-            // 1. send navn på en seperat linie
+            pw.println(nameField.getText()); // send navn til serveren
             // 2. send farver (rgb) på en seperat linie "12,144,54"
+            String color = redField.getText() + "," + greenField.getText() +
+                    "," + blueField.getText();
+            pw.println(color);
         });
         vBox.getChildren().addAll(nameField,redField, greenField, blueField,label);
         vBox.getChildren().addAll(connectBtn);
