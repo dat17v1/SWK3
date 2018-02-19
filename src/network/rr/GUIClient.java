@@ -73,6 +73,10 @@ public class GUIClient extends Application {
             String color = redField.getText() + "," + greenField.getText() +
                     "," + blueField.getText();
             pw.println(color);
+            nameField.setDisable(true);
+            redField.setDisable(true);
+            greenField.setDisable(true);
+            blueField.setDisable(true);
         });
         vBox.getChildren().addAll(nameField,redField, greenField, blueField,label);
         vBox.getChildren().addAll(connectBtn);
