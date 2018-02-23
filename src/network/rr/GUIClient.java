@@ -1,15 +1,11 @@
 package network.rr;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,114 +16,116 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class GUIClient extends Application {
-    private PrintWriter pw;
-    private double width = 500;
-    private double height = 500;
-    private GraphicsContext graphicsContext;
-    public static void main(String[] args) {
-        Application.launch(args); // vi starter "manuelt"
-    }
 
+    private double width = 1000;
+    private double height = 1000;
+    private PrintWriter pw;
+    private GraphicsContext graphicsContext;
     @Override
     public void start(Stage primaryStage) throws Exception {
-            // 1. Lav Container
+
         VBox vBox = new VBox();
+        Scene scene = new Scene(vBox, width,height);
+        addNodes(vBox);
+        vBox.getChildren().add(createDrawPane());
 
-        //2. Lav GUI element. Noget synligt
-        makeGUIElements(vBox);
+        assignKeyListener(scene);
 
-        //3. Lav Scene
-        Scene scene = new Scene(vBox, width,height + 100 );
-        scene.setOnKeyPressed(event -> {
-            this.handleKeyPressed(event);
-        });
-
-        //4. Angiv Scene i Stage
         primaryStage.setScene(scene);
-
-        // 5. Kald på Stage.show()
         primaryStage.show();
+
+
     }
 
-    private void handleKeyPressed(KeyEvent event){
-        switch (event.getCode()){
-            case UP: pw.println("UP"); break;
-            case DOWN: pw.println("DOWN"); break;
-            case LEFT: pw.println("LEFT"); break;
-            case RIGHT: pw.println("RIGHT"); break;
+    private void assignKeyListener(Scene scene) {
+        //scene.addEventFilter(KeyEvent.KEY_PRESSED, ...); // nogle PC'er foretrækker denne
+        // fremfor scene.setOnKeyPressed()
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case UP:    pw.println("UP"); break;
+                case DOWN:  pw.println("DOWN"); break;
+                case LEFT:  pw.println("LEFT"); break;
+                case RIGHT: pw.println("RIGHT"); break;
 
-        }
+            }
+        });
     }
 
-    private void makeGUIElements(VBox vBox) {
-        TextField nameField = new TextField();
-        nameField.setPromptText("indtast navn");
-        TextField redField = new TextField();
-        redField.setPromptText("indtast rød 0-255");
-        TextField greenField = new TextField();
-        greenField.setPromptText("indtast grøn 0-255");
-        TextField blueField = new TextField();
-        blueField.setPromptText("indtast blå 0-255");
-        Label label = new Label("Brug pilene til at styre din player");
-        Button connectBtn = new Button("Forbind");
-        connectBtn.setOnAction(event -> {
-            System.out.println("de har trykket på mig!");
-            // Opret forbindelse til Houston 192.168.0.8
-            // Skal sende med følgende protokol:
-            this.connectToServer();
-            pw.println(nameField.getText()); // send navn til serveren
-            // 2. send farver (rgb) på en seperat linie "12,144,54"
-            String color = redField.getText() + "," + greenField.getText() +
-                    "," + blueField.getText();
-            pw.println(color);
+    private Canvas createDrawPane() {
+        Canvas canvas = new Canvas(width, height);
+        graphicsContext = canvas.getGraphicsContext2D();
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                event -> {
+                    graphicsContext.beginPath();
+                    graphicsContext.moveTo(event.getX(), event.getY());
+                    pw.println("P," + event.getX() + "," + event.getY());
+                });
+
+        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                event -> {
+                    graphicsContext.lineTo(event.getX(), event.getY());
+                    graphicsContext.stroke();
+                    pw.println("D," + event.getX() + "," + event.getY());
+                });
+
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
+                event -> {
+                    graphicsContext.lineTo(event.getX(), event.getY());
+                    graphicsContext.stroke();
+                    graphicsContext.closePath();
+                    pw.println("R," + event.getX() + "," + event.getY());
+                });
+        initDraw(graphicsContext);
+        return canvas;
+    }
+
+    private void addNodes(VBox vBox) {
+        TextField nameField = new TextField("Hanna");
+        nameField.setPromptText("name");
+        TextField redField = new TextField("44");
+        redField.setPromptText("red 0-255");
+        TextField greenField = new TextField("133");
+        greenField.setPromptText("green 0-255");
+        TextField blueField = new TextField("200");
+        blueField.setPromptText("blue 0-255");
+        Button connectBtn = new Button("Connect");
+        connectBtn.setOnAction( e -> {
+            connect();
             nameField.setDisable(true);
             redField.setDisable(true);
             greenField.setDisable(true);
             blueField.setDisable(true);
+            String colors = redField.getText() + "," + greenField.getText() +
+                    "," +blueField.getText();
+            pw.println(nameField.getText());
+            pw.println(colors);
+            graphicsContext.setStroke(Color.web("rgb(" + colors + ")"));
         });
-        vBox.getChildren().addAll(nameField,redField, greenField, blueField,label);
-        vBox.getChildren().addAll(connectBtn);
-        // opret Canvas
-        Canvas canvas = new Canvas(width,height);
-        // håndtere Mouse events:
-
-        EventHandler<MouseEvent> mousePressedHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                graphicsContext.beginPath();
-                graphicsContext.moveTo(event.getX(), event.getY());
-            }
-        };
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, mousePressedHandler);
-
-        EventHandler<MouseEvent> mouseDraggedHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                graphicsContext.lineTo(event.getX(), event.getY());
-                graphicsContext.stroke(); // tegner fra sidste point i Path til x,y
-            }
-        };
-
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler);
-
-
-        graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setStroke(Color.BLUE); // sætter farve på stregen
-        graphicsContext.setLineWidth(2);
-
-        vBox.getChildren().add(canvas);
-
+        Button quitButton = new Button("Quit");
+        quitButton.setOnAction(event -> {
+            pw.println("QUIT");
+            pw.close();
+            System.exit(0);
+        });
+        vBox.getChildren().addAll(nameField, redField,
+                greenField, blueField,connectBtn,quitButton);
     }
 
-    private void connectToServer(){
-        try {
-            InetAddress inetAddress = InetAddress.getByName("192.168.0.8");
+    private void initDraw(GraphicsContext gc){
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(1);
+    }
+
+    private void connect(){
+        try{
+            InetAddress inetAddress = InetAddress.getByName("localhost");
             Socket socket = new Socket(inetAddress, 6780);
             pw = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("har forbindelse til server");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+            System.out.println("oprettet forbindelse til server");
+
+        }catch (Exception e){
+
+        }
     }
 }
