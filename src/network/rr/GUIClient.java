@@ -12,6 +12,7 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.PrintWriter;
@@ -90,15 +91,30 @@ public class GUIClient extends Application {
         Canvas canvas = new Canvas(width,height);
         // håndtere Mouse events:
 
-        EventHandler<MouseEvent> eventEventHandler = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> mousePressedHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("de trykkede på " + event.getX());
+                graphicsContext.beginPath();
+                graphicsContext.moveTo(event.getX(), event.getY());
             }
         };
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, eventEventHandler);
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, mousePressedHandler);
+
+        EventHandler<MouseEvent> mouseDraggedHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                graphicsContext.lineTo(event.getX(), event.getY());
+                graphicsContext.stroke(); // tegner fra sidste point i Path til x,y
+            }
+        };
+
+        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler);
+
 
         graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.setStroke(Color.BLUE); // sætter farve på stregen
+        graphicsContext.setLineWidth(2);
+
         vBox.getChildren().add(canvas);
 
     }
