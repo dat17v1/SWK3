@@ -1,22 +1,28 @@
 package network.rr;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class GUIClient extends Application {
     private PrintWriter pw;
-
+    private double width = 500;
+    private double height = 500;
+    private GraphicsContext graphicsContext;
     public static void main(String[] args) {
         Application.launch(args); // vi starter "manuelt"
     }
@@ -30,7 +36,7 @@ public class GUIClient extends Application {
         makeGUIElements(vBox);
 
         //3. Lav Scene
-        Scene scene = new Scene(vBox, 200,200 );
+        Scene scene = new Scene(vBox, width,height + 100 );
         scene.setOnKeyPressed(event -> {
             this.handleKeyPressed(event);
         });
@@ -80,6 +86,21 @@ public class GUIClient extends Application {
         });
         vBox.getChildren().addAll(nameField,redField, greenField, blueField,label);
         vBox.getChildren().addAll(connectBtn);
+        // opret Canvas
+        Canvas canvas = new Canvas(width,height);
+        // håndtere Mouse events:
+
+        EventHandler<MouseEvent> eventEventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("de trykkede på " + event.getX());
+            }
+        };
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, eventEventHandler);
+
+        graphicsContext = canvas.getGraphicsContext2D();
+        vBox.getChildren().add(canvas);
+
     }
 
     private void connectToServer(){
