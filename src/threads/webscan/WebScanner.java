@@ -12,7 +12,7 @@ public class WebScanner {
 
     public WebScanner(){
         for(String url: urls) {
-            new Thread(new URLReader(url, "KEA", this)).start();
+            new Thread(new URLReader(url, "Trump", this)).start();
         }
 //        URLReader urlReader = new URLReader("Trump", this);
 //        for(String url: urls) {
