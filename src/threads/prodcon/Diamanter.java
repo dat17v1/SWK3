@@ -10,13 +10,21 @@ public class Diamanter {
                 wait(); // vi venter OG lytter på notifyAll
             }
             count = count + 1;
+            System.out.print("inc: "+count + " ");
+            notifyAll(); // signalerer til Consumer, at der er én til diamant
         }catch (Exception e){
-
         }
     }
 
     public synchronized void dec(){
-
-        count = count - 1;
+        try {
+            while (count <= 0) {
+                wait(); // vi venter OG lytter på notifyAll
+            }
+            count = count - 1;
+            System.out.print("dec: "+count + " ");
+            notifyAll(); // signalerer til Consumer, at der er én til diamant
+        }catch (Exception e){
+        }
     }
 }
