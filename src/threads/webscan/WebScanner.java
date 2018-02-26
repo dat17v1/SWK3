@@ -1,7 +1,6 @@
 package threads.webscan;
 
 public class WebScanner {
-    //private String[] urls = new String[]{"borsen.dk", "dr.dk", "business.dk", "cnn.com", "b.dk"};
     private String[] urls = new String[]{"https://www.dr.dk/",
             "https://www.borsen.dk", "https://www.cnn.com", "https://www.b.dk", "https://www.ing.dk"
     ,"https://www.nytimes.com","https://www.bbc.co.uk","https://www.cnbc.com/world"};
@@ -14,7 +13,7 @@ public class WebScanner {
         for(String url: urls) {
             new Thread(new URLReader(url, "Trump", this)).start();
         }
-//        URLReader urlReader = new URLReader("Trump", this);
+//        URLReader urlReader = new URLReader("Trump", this); // Uden tråde, kører det dobbelt så langsomt
 //        for(String url: urls) {
 //            urlReader.setUrl(url);
 //            urlReader.scan();

@@ -43,13 +43,11 @@ public class URLReader implements Runnable{
             String out = "";
             while ((inputLine = in.readLine()) != null) {
                 out += inputLine + "\n";
-                //  System.out.println(inputLine);
             }
 
             in.close();
             Document doc = Jsoup.parse(out);
             String document = doc.body().text().toLowerCase();
-            // System.out.println(document);
             int pos = document.indexOf(company.toLowerCase());
             if (pos >= 0) {
                 int end = document.length() > pos + 50 ? pos + 50 : document.length();
