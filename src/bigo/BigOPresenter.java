@@ -21,6 +21,11 @@ public class BigOPresenter extends Application {
     private TextField n1Field = new TextField("20000");
     private TextField n2Field = new TextField("40000");
     NumberFormat formatter = new DecimalFormat("#0.000");
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         HBox hboxTxtFields = getNfieldsHBox();
