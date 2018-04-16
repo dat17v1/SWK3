@@ -46,6 +46,7 @@ public class ConnectedCircles extends Application {
             if(getChildren().size() == 0){
                 return;
             }
+            graph.clear();
             for(Node node: getChildren()){ // her laver vi grafen, men uden Edges
                 graph.addVertex(node);
             }
@@ -61,7 +62,7 @@ public class ConnectedCircles extends Application {
         Tree tree = graph.dfs(0);
         System.out.println("Result:" + tree);
         boolean areAllConnected = tree.areAllVerticesVisited();
-       
+
         for (Node circle : getChildren()) {
             if(areAllConnected){
                 ((Circle)circle).setFill(Color.RED);
