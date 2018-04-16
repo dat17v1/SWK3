@@ -41,23 +41,27 @@ public class ConnectedCircles extends Application {
             });
         }
 
+    private IGraph<Node> graph = new UnweightedGraph<>();
     private void colorIfConnected(){
             if(getChildren().size() == 0){
                 return;
             }
-       // Code
+            for(Node node: getChildren()){ // her laver vi grafen, men uden Edges
+                graph.addVertex(node);
+            }
             for(int i=0; i<getChildren().size(); i++){
                 for(int j= i + 1; j<getChildren().size(); j++) {
                     Circle circle1 = (Circle)getChildren().get(i);
                     Circle circle2 = (Circle)getChildren().get(j);
                     if(overlaps(circle1, circle2)){
-                      // code
+                      graph.addEdge(i,j);
                     }
                 }
             }
-            // code..
-        boolean areAllConnected = false;
-       // code...
+        Tree tree = graph.dfs(0);
+        System.out.println("Result:" + tree);
+        boolean areAllConnected = tree.areAllVerticesVisited();
+       
         for (Node circle : getChildren()) {
             if(areAllConnected){
                 ((Circle)circle).setFill(Color.RED);

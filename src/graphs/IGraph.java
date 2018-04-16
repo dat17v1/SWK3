@@ -8,4 +8,5 @@ public interface IGraph<V> {
     public void addEdge(int u, int v);
     public List<V> getVertices();
     public Tree dfs(int v);
+    public void clear();
 }

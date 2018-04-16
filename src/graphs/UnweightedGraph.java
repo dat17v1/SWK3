@@ -38,7 +38,45 @@ public class UnweightedGraph<V> implements IGraph<V> {
 
     @Override
     public Tree dfs(int v) {
-        return null;
+        boolean[] visited = new boolean[vertices.size()];
+        dfs(v,visited);
+        Tree tree = new Tree(v,visited);
+        return tree;
+    }
+
+    @Override
+    public void clear() {
+        vertices.clear();
+        neighbors.clear();
+    }
+
+    private void dfs(int v, boolean[] visited){
+        // 1. sæt relevant position til TRUE
+        visited[v] = true;
+        // 2. skaf alle naboer til v
+        // 3. for hver nabo u, besøg u såfrem den IKKE allerede er besøgt.
+        for (Integer u : getNeighbors(v)) {  // v=1, u = 5,4,3,2
+            // hvad skal vi spørge om her?
+            if(!visited[u]){
+                dfs(u,visited);
+            }
+        }
+    }
+
+    private List<Integer> getNeighbors(int u){
+        List<Integer> list = new ArrayList<>();
+        for (Edge edge : neighbors.get(u)) {
+            list.add(edge.v);
+        }
+        return list;
     }
 
 }
+
+
+
+
+
+
+
+

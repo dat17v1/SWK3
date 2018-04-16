@@ -11,14 +11,14 @@ public class Tree {
     }
 
 
-    public int getNumberOfVisitedVertices(){
+    public boolean areAllVerticesVisited(){
         int count = 0;
         for (int i = 0; i < visited.length; i++) {
-            if(i != root && visited[i]){
+            if(visited[i]){
                 count++;
             }
         }
-        return count;
+        return count == visited.length;
     }
 
     @Override
