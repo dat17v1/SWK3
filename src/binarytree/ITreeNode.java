@@ -6,7 +6,7 @@ public class ITreeNode
     protected ITreeNode left;
     protected int data;
 
-    public ITreeNode(ITreeNode right, ITreeNode left, int data) {
+    public ITreeNode(ITreeNode left, ITreeNode right, int data) {
         this.right = right;
         this.left = left;
         this.data = data;
