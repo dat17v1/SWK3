@@ -3,6 +3,7 @@ package streams.exercises;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
 
 public class LambdaExerciseSetup {
 
@@ -23,6 +24,24 @@ public class LambdaExerciseSetup {
         students.add(new Student("Oliver", "Oliver@stud.dk", 2016, true));
         students.add(new Student("Oscar", "Oscar@stud.dk", 2017, false));
         students.add(new Student("William", "William@stud.dk", 2016, true));
+
+        Predicate<Student> predicate = student -> {
+            if(!student.hasHandedInAssignments) return false;
+            return  student.isActive;
+        };
+        //checkStatus(predicate);
+
+        students.stream()
+                .filter(student -> student.isActive)
+                .sorted()
+                .map(student -> student.name)
+                .forEach(s -> System.out.println(s));
+
+    }
+
+    private void checkStatus(Predicate<Student> predicate){
+        students.stream()
+                .forEach(student -> System.out.println(student.name + " aktiv: " + predicate.test(student)));
 
     }
 
