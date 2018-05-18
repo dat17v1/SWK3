@@ -13,11 +13,6 @@ public class Lambdas {
     public static void main(String[] args) {
 
 
-
-
-
-
-
         Predicate<String> stringLength = s -> {
             return s.length() > 3;
         };
@@ -32,14 +27,6 @@ public class Lambdas {
         navne.stream()
                 .filter(stringLength)// returnerer en ny stream
                 .forEach(System.out::println);
-
-
-
-
-
-
-
-
 
 
 

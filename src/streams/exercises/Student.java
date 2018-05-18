@@ -17,9 +17,12 @@ public class Student implements Comparable<Student> {
 
     @Override
     public int compareTo(Student other) {  // -1 , 0 , 1
-        if(other.name.compareTo(name) == 0) return 0;
-        else
+        if(other.name.compareTo(name) == 0) {
+            return 0;
+        }
+        else {
             return other.name.compareTo(name);
+        }
     }
 
     public String toString(){

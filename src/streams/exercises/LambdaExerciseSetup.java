@@ -12,28 +12,23 @@ public class LambdaExerciseSetup {
         new LambdaExerciseSetup();
     }
 
+    public boolean predicateMethod(Student student){
+        return student.isActive;
+    }
 
     public LambdaExerciseSetup(){
-        students.add(new Student("Sofia", "Sofia@stud.dk", 2017, true));
-        students.add(new Student("Alma", "Alma@stud.dk", 2016, true));
-        students.add(new Student("Ida", "Ida@stud.dk", 2015, true));
-        students.add(new Student("Freja", "Freja@stud.dk", 2017, false));
-        students.add(new Student("Clara", "Clara@stud.dk", 2016, false));
-        students.add(new Student("Noah", "Noah@stud.dk", 2014, true));
-        students.add(new Student("Victor", "Victor@stud.dk", 2015, true));
-        students.add(new Student("Oliver", "Oliver@stud.dk", 2016, true));
-        students.add(new Student("Oscar", "Oscar@stud.dk", 2017, false));
-        students.add(new Student("William", "William@stud.dk", 2016, true));
-
+        addStudents();
         Predicate<Student> predicate = student -> {
-            if(!student.hasHandedInAssignments) return false;
+           // if(!student.hasHandedInAssignments) return false;
+
             return  student.isActive;
         };
         //checkStatus(predicate);
 
         students.stream()
-                .filter(student -> student.isActive)
+                .filter(predicate)
                 .sorted()
+                //.mapToInt(student -> student.yearStarted)
                 .map(student -> student.name)
                 .forEach(s -> System.out.println(s));
 
@@ -44,5 +39,20 @@ public class LambdaExerciseSetup {
                 .forEach(student -> System.out.println(student.name + " aktiv: " + predicate.test(student)));
 
     }
+
+    private void addStudents() {
+        students.add(new Student("Sofia", "Sofia@stud.dk", 2017, true));
+        students.add(new Student("Alma", "Alma@stud.dk", 2016, true));
+        students.add(new Student("Ida", "Ida@stud.dk", 2015, true));
+        students.add(new Student("Freja", "Freja@stud.dk", 2017, false));
+        students.add(new Student("Clara", "Clara@stud.dk", 2016, false));
+        students.add(new Student("Noah", "Noah@stud.dk", 2014, true));
+        students.add(new Student("Victor", "Victor@stud.dk", 2015, true));
+        students.add(new Student("Oliver", "Oliver@stud.dk", 2016, true));
+        students.add(new Student("Oscar", "Oscar@stud.dk", 2017, false));
+        students.add(new Student("William", "William@stud.dk", 2016, true));
+    }
+
+
 
 }
