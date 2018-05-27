@@ -23,7 +23,7 @@ til sidst. Hvis du aktiverer denne linie, og udkommenterer den anden, vil du se,
 Der findes også en anden, mere fleksibel lås, som hedder "lock in share mode". Denne tillader andre brugere
 at læse rækken, men ikke at opdatere eller slette, sålænge som den første proces er i gang.
 
-Praktisk info: i samme package ligger filen sqlDump.sql. Den kan du evt anvende for at oprette tabellen 'bank'
+Praktisk info: i denne package ligger filen sqlDump.sql. Den kan du evt anvende for at oprette tabellen 'bank'
  */
 
 public class BankKontoEksempel {
